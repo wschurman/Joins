@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Buffer Manager">
+      <UniqueIdentifier>{2218de1e-dea4-44b8-adb6-eb0672b90a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Heap Page">
+      <UniqueIdentifier>{2b5005e3-c573-4ce9-9837-b25e85b56d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\B+ Tree">
+      <UniqueIdentifier>{b8429407-0e14-4bc7-86e1-efe5f65837bc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\da_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\db.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\minirel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\new_error.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\page.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\system_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BTreeFile.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BTreeInclude.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BTreeFileScan.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\BTreeHeaderPage.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\bufmgr.h">
+      <Filter>Header Files\Buffer Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\clockframe.h">
+      <Filter>Header Files\Buffer Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hash.h">
+      <Filter>Header Files\Buffer Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\frame.h">
+      <Filter>Header Files\Buffer Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\replacer.h">
+      <Filter>Header Files\Buffer Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PageKVScan.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ResizableRecordPage.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SortedKVPage.h">
+      <Filter>Header Files\B+ Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="include\heappage.h">
+      <Filter>Header Files\Heap Page</Filter>
+    </ClInclude>
+    <ClInclude Include="include\heapfile.h">
+      <Filter>Header Files\Heap Page</Filter>
+    </ClInclude>
+    <ClInclude Include="include\heaptest.h">
+      <Filter>Header Files\Heap Page</Filter>
+    </ClInclude>
+    <ClInclude Include="include\dirpage.h">
+      <Filter>Header Files\Heap Page</Filter>
+    </ClInclude>
+    <ClInclude Include="include\scan.h">
+      <Filter>Header Files\Heap Page</Filter>
+    </ClInclude>
+    <ClInclude Include="include\join.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\JoinTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TestSchema.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\join.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\BlockNestedLoops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\JoinTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TupleNestedLoops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IndexNestedLoops.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SortMerge.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestSchema.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
