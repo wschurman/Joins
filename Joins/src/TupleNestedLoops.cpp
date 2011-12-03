@@ -55,6 +55,8 @@ Status TupleNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 		rightScan->MoveTo(rightFirstRid);
 	}
 
+	delete leftScan;
+	delete rightScan;
 	delete leftRec;
 	delete rightRec;
 	delete newRec;

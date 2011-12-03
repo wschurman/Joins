@@ -55,11 +55,11 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 	Status st = OK;
 
 	while (true) {
-		st = leftScan->GetNext(leftRid, (char *)leftRec, leftRecLen);
 		if (blockArraySize < blockSize) {
-			memcpy(blockArray + left.recLen * blockArraySize, leftRec, left.recLen);
-			blockArraySize++;
+			st = leftScan->GetNext(leftRid, (char *)leftRec, leftRecLen);
 			if (st != DONE) {
+				memcpy(blockArray + left.recLen * blockArraySize, leftRec, left.recLen);
+				blockArraySize++;
 				continue;
 			}
 		}
@@ -84,6 +84,8 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 		}
 	}
 
+	delete leftScan;
+	delete rightScan;
 	delete blockArray;
 	delete leftRec;
 	delete rightRec;
