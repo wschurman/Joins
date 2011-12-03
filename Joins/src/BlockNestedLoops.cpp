@@ -84,16 +84,16 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 		}
 	}
 
+	out.file = tmpHeap;
+
+	std::cout << "NUM BNL: " << tmpHeap->GetNumOfRecords() << std::endl;
+
 	delete leftScan;
 	delete rightScan;
 	delete blockArray;
 	delete leftRec;
 	delete rightRec;
 	delete newRec;
-
-	out.file = tmpHeap;
-
-	std::cout << "NUM BNL: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	return OK;
 }

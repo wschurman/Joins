@@ -55,15 +55,15 @@ Status TupleNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 		rightScan->MoveTo(rightFirstRid);
 	}
 
+	out.file = tmpHeap;
+
+	std::cout << "NUM TNL: " << tmpHeap->GetNumOfRecords() << std::endl;
+
 	delete leftScan;
 	delete rightScan;
 	delete leftRec;
 	delete rightRec;
 	delete newRec;
-
-	out.file = tmpHeap;
-
-	std::cout << "NUM TNL: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	return OK;
 }
