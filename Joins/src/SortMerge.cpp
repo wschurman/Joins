@@ -41,7 +41,13 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 		return FAIL;
 	}
 
-	RecordID leftRid, rightRid, outRid;
+	Scan * rightGScan = rightSorted->OpenScan(s);
+	if (s != OK) {
+		std::cout << "Open scan left failed" << std::endl;
+		return FAIL;
+	}
+
+	RecordID leftRid, rightRid, rightGRid, outRid;
 	int* leftRecT = new int[left.numOfAttr]; // Tr
 	int* rightRecT = new int[right.numOfAttr]; // Ts
 	int* rightRecS = new int[right.numOfAttr]; // Gs
@@ -54,35 +60,63 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 
 	leftRecTStatus = leftScan->GetNext(leftRid, (char *)leftRecT, leftRecLen);
 	rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
-	rightRecSStatus = rightRecTStatus;
-	memcpy(rightRecS, rightRecT, right.recLen);
+	rightRecSStatus = rightGScan->GetNext(rightGRid, (char *)rightRecS, rightRecLen);
 
 	while (leftRecTStatus != DONE && rightRecSStatus != DONE) {
 
+		// while left is less than right, move left up
 		while (leftRecT[left.joinAttr] < rightRecS[right.joinAttr]) {
 			leftRecTStatus = leftScan->GetNext(leftRid, (char *)leftRecT, leftRecLen);
+			if (leftRecTStatus == DONE) {
+				break;
+			}
+		}
+		if (leftRecTStatus == DONE) {
+			break;
 		}
 
+		// while left is greater than right, move right up
 		while (leftRecT[left.joinAttr] > rightRecS[right.joinAttr]) {
-			rightRecSStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
+			rightRecSStatus = rightGScan->GetNext(rightGRid, (char *)rightRecS, rightRecLen);
+			if (rightRecSStatus == DONE) {
+				break;
+			}
+		}
+		if (rightRecSStatus == DONE) {
+			break;
 		}
 
-		memcpy(rightRecT, rightRecS, right.recLen);
+		// Ts = Gs
+		rightScan->MoveTo(rightGRid);
+		rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
 
-		while (leftRecT[left.joinAttr] == rightRecS[right.joinAttr]) {
-			memcpy(rightRecT, rightRecS, right.recLen);
+
+		while (leftRecT[left.joinAttr] == rightRecS[right.joinAttr]) { // while the two are equal
+
+			// Ts = Gs
+			rightScan->MoveTo(rightGRid);
+			rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
 
 			while (rightRecT[right.joinAttr] == leftRecT[left.joinAttr]) {
 				MakeNewRecord(newRec, (char *)leftRecT, (char *)rightRecT, left, right);
 				tmpHeap->InsertRecord(newRec, left.recLen + right.recLen, outRid);
 
 				rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
+
+				if (rightRecTStatus == DONE) {
+					break;
+				}
 			}
 
 			leftRecTStatus = leftScan->GetNext(leftRid, (char *)leftRecT, leftRecLen);
+
+			if (leftRecTStatus == DONE) {
+				break;
+			}
 		}
 
-		memcpy(rightRecT, rightRecS, right.recLen);
+		rightGScan->MoveTo(rightRid);
+		rightRecSStatus = rightGScan->GetNext(rightGRid, (char *)rightRecS, rightRecLen);
 	}
 
 	out.file = tmpHeap;
@@ -97,7 +131,7 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 	delete leftSorted;
 	delete rightSorted;
 
-	std::cout << "NUM TNL: " << tmpHeap->GetNumOfRecords() << std::endl;
+	std::cout << "NUM SM: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	return OK;
 }
