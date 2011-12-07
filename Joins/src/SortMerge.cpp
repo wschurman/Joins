@@ -58,6 +58,7 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 
 	Status leftRecTStatus, rightRecTStatus, rightRecSStatus;
 
+	// scan the first element for all scans
 	leftRecTStatus = leftScan->GetNext(leftRid, (char *)leftRecT, leftRecLen);
 	rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
 	rightRecSStatus = rightGScan->GetNext(rightGRid, (char *)rightRecS, rightRecLen);
@@ -71,7 +72,7 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 				break;
 			}
 		}
-		if (leftRecTStatus == DONE) {
+		if (leftRecTStatus == DONE) { // if done, no more joins, break
 			break;
 		}
 
@@ -82,7 +83,7 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 				break;
 			}
 		}
-		if (rightRecSStatus == DONE) {
+		if (rightRecSStatus == DONE) { // if done, no more joins, break
 			break;
 		}
 
@@ -91,17 +92,17 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 		rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
 
 
-		while (leftRecT[left.joinAttr] == rightRecS[right.joinAttr]) { // while the two are equal
+		while (leftRecT[left.joinAttr] == rightRecS[right.joinAttr]) { // while the two are equal, segment equal
 
 			// Ts = Gs
 			rightScan->MoveTo(rightGRid);
 			rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
 
-			while (rightRecT[right.joinAttr] == leftRecT[left.joinAttr]) {
+			while (rightRecT[right.joinAttr] == leftRecT[left.joinAttr]) { // put the segment x left in
 				MakeNewRecord(newRec, (char *)leftRecT, (char *)rightRecT, left, right);
 				tmpHeap->InsertRecord(newRec, left.recLen + right.recLen, outRid);
 
-				rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen);
+				rightRecTStatus = rightScan->GetNext(rightRid, (char *)rightRecT, rightRecLen); // scan next in segment
 
 				if (rightRecTStatus == DONE) {
 					break;
@@ -120,6 +121,7 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 	}
 
 	out.file = tmpHeap;
+	//std::cout << "NUM SM: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	delete leftScan;
 	delete rightScan;
@@ -130,8 +132,6 @@ Status SortMerge::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out) {
 
 	delete leftSorted;
 	delete rightSorted;
-
-	std::cout << "NUM SM: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	return OK;
 }

@@ -438,19 +438,13 @@ bool JoinTest::Test2() {
 	bool ret = GenAndCompareJoins(&tl, bl, 100, 100, true, RANDOM);
 	ret = ret && GenAndCompareJoins(&tl, bl, 100, 100, false, RANDOM);
 
-	std::cout << "ret 2.1: " << ret << std::endl;
-
 	ret = ret && GenAndCompareJoins(&tl, bl, 1000, 1000, true, RANDOM);
 	ret = ret && GenAndCompareJoins(&tl, bl, 1000, 1000, false, RANDOM);
 	ret = ret && GenAndCompareJoins(&tl, bl, 3000, 1000, false, RANDOM);
 
-	std::cout << "ret 2.2: " << ret << std::endl;
-
 	ret = ret && GenAndCompareJoins(&tl, bl, 1000, 1000, true, NONE_MATCH);
 	ret = ret && GenAndCompareJoins(&tl, bl, 1000, 1000, false, NONE_MATCH);
 	ret = ret && GenAndCompareJoins(&tl, bl, 100, 100, false, ALL_MATCH);
-
-	std::cout << "ret 2.3: " << ret << std::endl;
 
 	delete bl;
 	// Try a different block size. 

@@ -36,11 +36,14 @@ Status TupleNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 	}
 
 	RecordID leftRid, rightRid, rightFirstRid, outRid;
+
+	// cast the fields as an it to access attributes
 	int* leftRec = new int[left.numOfAttr];
 	int* rightRec = new int[right.numOfAttr];
 	int leftRecLen = left.recLen;
 	int rightRecLen = right.recLen;
 
+	// for the new record to be placed in the out file
 	char* newRec = new char[left.recLen + right.recLen];
 
 	rightFirstRid = rightScan->currRid;
@@ -56,8 +59,7 @@ Status TupleNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 	}
 
 	out.file = tmpHeap;
-
-	std::cout << "NUM TNL: " << tmpHeap->GetNumOfRecords() << std::endl;
+	//std::cout << "NUM TNL: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	delete leftScan;
 	delete rightScan;

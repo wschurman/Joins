@@ -40,8 +40,10 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 	}
 
 	RecordID leftRid, rightRid, rightFirstRid, outRid;
+
+	// array to hold the "block" in memory
 	char* blockArray = new char[left.recLen * blockSize];
-	int blockArraySize = 0;
+	int blockArraySize = 0; // size in case of half full block
 	int* leftCurrRec = (int *)blockArray;
 	int* leftRec = new int[left.numOfAttr];
 	int* rightRec = new int[right.numOfAttr];
@@ -55,6 +57,7 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 	Status st = OK;
 
 	while (true) {
+		// fill the block with as many records as possible
 		if (blockArraySize < blockSize) {
 			st = leftScan->GetNext(leftRid, (char *)leftRec, leftRecLen);
 			if (st != DONE) {
@@ -64,6 +67,7 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 			}
 		}
 
+		// scan through the right, and scan the block in memory for joins
 		while (rightScan->GetNext(rightRid, (char *)rightRec, rightRecLen) != DONE) {
 			for (int j = 0; j < blockSize; j++) {
 				if (j >= blockArraySize) {
@@ -85,8 +89,7 @@ Status BlockNestedLoops::Execute(JoinSpec& left, JoinSpec& right, JoinSpec& out)
 	}
 
 	out.file = tmpHeap;
-
-	std::cout << "NUM BNL: " << tmpHeap->GetNumOfRecords() << std::endl;
+	//std::cout << "NUM BNL: " << tmpHeap->GetNumOfRecords() << std::endl;
 
 	delete leftScan;
 	delete rightScan;
